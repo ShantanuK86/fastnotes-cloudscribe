@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Hero } from "@/components/landing/Hero";
 import { Features } from "@/components/landing/Features";
 import { motion, useAnimation } from "framer-motion";
+import { AppBar } from "@/components/layout/AppBar";
 
 const Index = () => {
   const controls = useAnimation();
@@ -20,6 +21,7 @@ const Index = () => {
       animate={controls}
       className="min-h-screen bg-background"
     >
+      <AppBar />
       <Hero />
       <Features />
     </motion.div>
