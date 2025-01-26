@@ -35,6 +35,9 @@ export const NoteCard = ({ note }: NoteCardProps) => {
             <PinIcon className="h-4 w-4" />
           </Button>
         </div>
+        <p className="text-xs text-muted-foreground">
+          ID: {note.id.slice(0, 8)}
+        </p>
       </CardHeader>
       <CardContent className="space-y-2">
         <p className="text-sm text-muted-foreground">{note.content}</p>
@@ -52,7 +55,7 @@ export const NoteCard = ({ note }: NoteCardProps) => {
           </Button>
         </div>
         <div className="flex items-center text-xs text-muted-foreground">
-          <span>Updated {format(new Date(note.updated_at), "MMM d")}</span>
+          <span>Created {format(new Date(note.created_at), "MMM d")}</span>
         </div>
       </CardFooter>
     </Card>
