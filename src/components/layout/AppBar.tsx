@@ -6,6 +6,7 @@ import {
   NavigationMenuItem,
 } from "@/components/ui/navigation-menu";
 import { useAuth } from "@/contexts/AuthContext";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 export const AppBar = () => {
   const { user, signOut } = useAuth();
@@ -69,6 +70,7 @@ export const AppBar = () => {
         </NavigationMenu>
 
         <div className="flex flex-1 items-center justify-end space-x-4">
+          <ThemeToggle />
           <Button variant="ghost" className="text-base" onClick={handleAuthAction}>
             {user ? "Sign out" : "Log in"}
           </Button>
