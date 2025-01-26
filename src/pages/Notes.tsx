@@ -4,7 +4,7 @@ import { CreateNoteCard } from "@/components/notes/CreateNoteCard";
 import { useNotes } from "@/hooks/useNotes";
 
 const Notes = () => {
-  const { notes, isLoading } = useNotes();
+  const { data: notes, isLoading } = useNotes();
   const [isCreating, setIsCreating] = useState(false);
 
   return (

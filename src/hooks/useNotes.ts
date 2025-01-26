@@ -23,9 +23,15 @@ export const useCreateNote = () => {
 
   return useMutation({
     mutationFn: async (note: Pick<Note, "title" | "content">) => {
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      if (userError) throw userError;
+
       const { data, error } = await supabase
         .from("notes")
-        .insert(note)
+        .insert({
+          ...note,
+          user_id: userData.user.id,
+        })
         .select()
         .single();
 
