@@ -1,21 +1,21 @@
-import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
-  NavigationMenuList,
   NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import { useAuth } from "@/contexts/AuthContext";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { Link, useNavigate } from "react-router-dom";
 
 export const AppBar = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
-  const handleAuthAction = async () => {
+  const handleAuthAction = () => {
     if (user) {
-      await signOut();
-      navigate("/");
+      signOut();
     } else {
       navigate("/auth");
     }
@@ -23,46 +23,24 @@ export const AppBar = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center">
-        <div className="mr-4 flex">
-          <Link to="/" className="mr-6 flex items-center space-x-2">
-            <span className="font-display text-xl font-bold">Fastnotes</span>
-          </Link>
-        </div>
-
-        <NavigationMenu className="hidden md:flex">
+      <div className="container flex h-14 items-center">
+        <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
               <Link
                 to="/"
-                className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                className="flex items-center space-x-2"
               >
-                What's New
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link
-                to="/"
-                className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-              >
-                Features
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link
-                to="/"
-                className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-              >
-                Pricing
+                <span className="font-bold">Fastnotes</span>
               </Link>
             </NavigationMenuItem>
             {user && (
               <NavigationMenuItem>
                 <Link
-                  to="/dashboard"
-                  className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                  to="/notes"
+                  className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                 >
-                  Dashboard
+                  My Notes
                 </Link>
               </NavigationMenuItem>
             )}
@@ -71,17 +49,13 @@ export const AppBar = () => {
 
         <div className="flex flex-1 items-center justify-end space-x-4">
           <ThemeToggle />
-          <Button variant="ghost" className="text-base" onClick={handleAuthAction}>
+          <Button
+            variant="ghost"
+            className="text-base"
+            onClick={handleAuthAction}
+          >
             {user ? "Sign out" : "Log in"}
           </Button>
-          {!user && (
-            <Button
-              className="bg-primary text-white hover:bg-primary-600"
-              onClick={() => navigate("/auth")}
-            >
-              Sign up
-            </Button>
-          )}
         </div>
       </div>
     </header>
