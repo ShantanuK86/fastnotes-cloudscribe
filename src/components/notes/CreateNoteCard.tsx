@@ -73,12 +73,14 @@ export const CreateNoteCard = ({
           placeholder="Note title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          className="text-lg font-semibold"
         />
         <Textarea
           placeholder="Start typing..."
           value={content}
           onChange={(e) => setContent(e.target.value)}
           rows={4}
+          className="resize-none"
         />
         <div className="flex justify-end gap-2">
           <Button

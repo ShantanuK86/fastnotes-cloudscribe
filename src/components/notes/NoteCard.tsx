@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button";
 import { Note } from "@/types";
 import { useAuth } from "@/contexts/AuthContext";
-import { CalendarIcon, PinIcon, ArchiveIcon } from "lucide-react";
+import { MessageSquare, Heart, Share2, PinIcon } from "lucide-react";
 import { useUpdateNote } from "@/hooks/useNotes";
 
 interface NoteCardProps {
@@ -21,18 +21,11 @@ export const NoteCard = ({ note }: NoteCardProps) => {
     });
   };
 
-  const toggleArchive = () => {
-    updateNote.mutate({
-      id: note.id,
-      is_archived: !note.is_archived,
-    });
-  };
-
   return (
-    <Card>
+    <Card className="hover:shadow-lg transition-shadow duration-200">
       <CardHeader className="space-y-1">
         <div className="flex items-start justify-between">
-          <h3 className="font-semibold text-lg">{note.title}</h3>
+          <h3 className="font-semibold text-xl">{note.title}</h3>
           <Button
             variant="ghost"
             size="icon"
@@ -42,35 +35,25 @@ export const NoteCard = ({ note }: NoteCardProps) => {
             <PinIcon className="h-4 w-4" />
           </Button>
         </div>
-        <p className="text-sm text-muted-foreground">
-          by {user?.email}
-        </p>
       </CardHeader>
       <CardContent className="space-y-2">
-        <p className="text-sm">{note.content}</p>
-        {note.target_date && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <CalendarIcon className="h-4 w-4" />
-            <span>
-              Target: {format(new Date(note.target_date), "PPP")}
-            </span>
-          </div>
-        )}
+        <p className="text-sm text-muted-foreground">{note.content}</p>
       </CardContent>
-      <CardFooter className="flex justify-between text-sm text-muted-foreground">
-        <div className="space-y-1">
-          <p>Created {format(new Date(note.created_at), "PPP")}</p>
-          <p>Last edited {format(new Date(note.updated_at), "PPP")}</p>
-          <p className="font-mono text-xs">ID: {note.id.slice(0, 8)}...</p>
+      <CardFooter className="flex justify-between">
+        <div className="flex items-center space-x-4 text-muted-foreground">
+          <Button variant="ghost" size="icon">
+            <Heart className="h-4 w-4" />
+          </Button>
+          <Button variant="ghost" size="icon">
+            <MessageSquare className="h-4 w-4" />
+          </Button>
+          <Button variant="ghost" size="icon">
+            <Share2 className="h-4 w-4" />
+          </Button>
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={toggleArchive}
-          className={note.is_archived ? "text-destructive" : ""}
-        >
-          <ArchiveIcon className="h-4 w-4" />
-        </Button>
+        <div className="flex items-center text-xs text-muted-foreground">
+          <span>Updated {format(new Date(note.updated_at), "MMM d")}</span>
+        </div>
       </CardFooter>
     </Card>
   );
