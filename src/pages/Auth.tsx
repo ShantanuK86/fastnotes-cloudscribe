@@ -1,87 +1,94 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/components/ui/use-toast";
 
 const Auth = () => {
-  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
   const { signIn, signUp } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     try {
-      if (isLogin) {
-        await signIn(email, password);
-      } else {
+      if (isSignUp) {
         await signUp(email, password);
+        toast({
+          title: "Success!",
+          description: "Please check your email to verify your account.",
+        });
+      } else {
+        await signIn(email, password);
+        navigate("/");
       }
-      navigate("/");
-    } catch (error) {
-      console.error("Authentication error:", error);
-    } finally {
-      setLoading(false);
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message,
+      });
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>{isLogin ? "Welcome Back" : "Create Account"}</CardTitle>
-          <CardDescription>
-            {isLogin
-              ? "Enter your credentials to access your account"
-              : "Sign up for a new account to get started"}
-          </CardDescription>
-        </CardHeader>
-        <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+    <div className="container mx-auto flex min-h-screen items-center justify-center px-4">
+      <div className="w-full max-w-md space-y-8">
+        <div className="text-center">
+          <h2 className="mt-6 font-display text-3xl font-bold tracking-tight">
+            {isSignUp ? "Create your account" : "Welcome back"}
+          </h2>
+          <p className="mt-2 text-sm text-gray-600">
+            {isSignUp ? "Start taking better notes today" : "Sign in to continue"}
+          </p>
+        </div>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-4 rounded-md shadow-sm">
+            <div>
               <Input
-                id="email"
                 type="email"
-                placeholder="Enter your email"
+                required
+                placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
+                className="w-full"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+            <div>
               <Input
-                id="password"
                 type="password"
-                placeholder="Enter your password"
+                required
+                placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
+                className="w-full"
               />
             </div>
-          </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Loading..." : isLogin ? "Sign In" : "Sign Up"}
+          </div>
+
+          <div>
+            <Button type="submit" className="w-full">
+              {isSignUp ? "Sign up" : "Sign in"}
             </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              className="w-full"
-              onClick={() => setIsLogin(!isLogin)}
-            >
-              {isLogin ? "Need an account? Sign Up" : "Already have an account? Sign In"}
-            </Button>
-          </CardFooter>
+          </div>
         </form>
-      </Card>
+
+        <div className="text-center">
+          <Button
+            variant="link"
+            className="text-sm"
+            onClick={() => setIsSignUp(!isSignUp)}
+          >
+            {isSignUp
+              ? "Already have an account? Sign in"
+              : "Don't have an account? Sign up"}
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
