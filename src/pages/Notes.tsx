@@ -1,47 +1,49 @@
-import { useState } from "react";
-import { NotesList } from "@/components/notes/NotesList";
-import { CreateNoteCard } from "@/components/notes/CreateNoteCard";
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { format } from "date-fns";
 import { useNotes } from "@/hooks/useNotes";
 import { AppLayout } from "@/components/layout/AppLayout";
-import { format } from "date-fns";
+import { CreateNoteCard } from "@/components/notes/CreateNoteCard";
+import { NotesList } from "@/components/notes/NotesList";
 
 const Notes = () => {
   const { data: notes, isLoading } = useNotes();
-  const [isCreating, setIsCreating] = useState(false);
+  const [searchParams] = useSearchParams();
+  const selectedDate = searchParams.get('date');
+
+  const filteredNotes = selectedDate
+    ? notes?.filter(note => {
+        const noteDate = format(new Date(note.created_at), 'yyyy-MM-dd');
+        return noteDate === selectedDate;
+      })
+    : notes;
 
   return (
     <AppLayout>
-      <div className="container mx-auto py-8 px-4">
-        <div className="space-y-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-4xl font-bold">Today</h1>
-              <p className="text-muted-foreground mt-2">
-                Good {getTimeOfDay()}, here's everything from {format(new Date(), "do MMMM")}
-              </p>
-            </div>
+      <div className="container mx-auto p-6 space-y-8">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">
+              {selectedDate 
+                ? format(new Date(selectedDate), 'MMMM d, yyyy')
+                : "All Notes"}
+            </h1>
             <p className="text-muted-foreground">
-              {notes?.length || 0} {notes?.length === 1 ? "note" : "notes"}
+              {filteredNotes?.length || 0} notes
             </p>
           </div>
-
-          <CreateNoteCard
-            isCreating={isCreating}
-            onIsCreatingChange={setIsCreating}
-          />
-
-          {!isCreating && <NotesList notes={notes} isLoading={isLoading} />}
         </div>
+        
+        <CreateNoteCard />
+        
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          <NotesList notes={filteredNotes || []} />
+        )}
       </div>
     </AppLayout>
   );
-};
-
-const getTimeOfDay = () => {
-  const hour = new Date().getHours();
-  if (hour < 12) return "morning";
-  if (hour < 18) return "afternoon";
-  return "evening";
 };
 
 export default Notes;

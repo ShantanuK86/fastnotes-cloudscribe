@@ -1,4 +1,4 @@
-import { Calendar, Home, Search, MessageSquare, Code, BookOpen, Coffee, Heart, Archive } from "lucide-react";
+import { Calendar as CalendarIcon, Home, MessageSquare, Calendar, Code, BookOpen, Coffee, Heart, Archive, User, Settings, LogOut } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -8,7 +8,14 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarFooter,
 } from "@/components/ui/sidebar";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
 
 const mainItems = [
   { title: "Home", icon: Home, count: "3298" },
@@ -26,6 +33,17 @@ const collections = [
 ];
 
 export function AppSidebar() {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+  const [date, setDate] = useState<Date | undefined>(new Date());
+
+  const handleDateSelect = (date?: Date) => {
+    setDate(date);
+    if (date) {
+      navigate(`/notes?date=${format(date, 'yyyy-MM-dd')}`);
+    }
+  };
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -48,6 +66,17 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
+          <div className="px-4 py-2">
+            <CalendarComponent
+              mode="single"
+              selected={date}
+              onSelect={handleDateSelect}
+              className="rounded-md border"
+            />
+          </div>
+        </SidebarGroup>
+
+        <SidebarGroup>
           <SidebarGroupLabel>Collections</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -65,20 +94,24 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Archive">
-                  <Archive className="h-4 w-4" />
-                  <span>Archive</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter className="border-t">
+        <div className="flex items-center justify-between p-4">
+          <div className="flex items-center gap-2">
+            <User className="h-5 w-5" />
+            <span className="text-sm font-medium">{user?.email}</span>
+          </div>
+          <div className="flex gap-1">
+            <Button variant="ghost" size="icon" onClick={() => navigate('/settings')}>
+              <Settings className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" onClick={() => signOut()}>
+              <LogOut className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </SidebarFooter>
     </Sidebar>
   );
 }
