@@ -46,7 +46,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarContent>
+      <SidebarContent className="scrollbar-none">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
