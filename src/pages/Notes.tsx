@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { format } from "date-fns";
 import { useNotes } from "@/hooks/useNotes";
@@ -10,6 +10,7 @@ const Notes = () => {
   const { data: notes, isLoading } = useNotes();
   const [searchParams] = useSearchParams();
   const selectedDate = searchParams.get('date');
+  const [isCreating, setIsCreating] = useState(false);
 
   const filteredNotes = selectedDate
     ? notes?.filter(note => {
@@ -34,13 +35,15 @@ const Notes = () => {
           </div>
         </div>
         
-        <CreateNoteCard />
+        <CreateNoteCard 
+          isCreating={isCreating}
+          onIsCreatingChange={setIsCreating}
+        />
         
-        {isLoading ? (
-          <div>Loading...</div>
-        ) : (
-          <NotesList notes={filteredNotes || []} />
-        )}
+        <NotesList 
+          notes={filteredNotes} 
+          isLoading={isLoading}
+        />
       </div>
     </AppLayout>
   );
