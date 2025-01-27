@@ -1,4 +1,4 @@
-import { Calendar as CalendarIcon, Home, MessageSquare, Calendar, Code, BookOpen, Coffee, Heart, Archive, User, Settings, LogOut } from "lucide-react";
+import { Calendar as CalendarIcon, Home, MessageSquare, Calendar, Code, BookOpen, Coffee, Heart, Archive, User, Settings, LogOut, ChevronLeft } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -9,6 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarFooter,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
@@ -47,6 +48,9 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarContent className="scrollbar-none">
+        <div className="flex justify-end px-2 py-2">
+          <SidebarTrigger />
+        </div>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -71,7 +75,7 @@ export function AppSidebar() {
               mode="single"
               selected={date}
               onSelect={handleDateSelect}
-              className="rounded-md border"
+              className="rounded-md border w-full"
             />
           </div>
         </SidebarGroup>
