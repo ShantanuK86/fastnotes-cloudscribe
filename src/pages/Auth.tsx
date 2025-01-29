@@ -148,8 +148,8 @@ const Auth = () => {
         {/* Right side - Image */}
         <div className="hidden w-1/2 bg-orange-500 md:block">
           <img
-            src="/lovable-uploads/25e19c06-733c-4ff6-adbd-7aedabcff991.png"
-            alt="Login illustration"
+            src="https://images.unsplash.com/photo-1498050108023-c5249f4df085"
+            alt="AI Note Taking"
             className="h-full w-full object-cover"
           />
         </div>
