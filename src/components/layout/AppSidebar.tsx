@@ -1,4 +1,4 @@
-import { Calendar as CalendarIcon, Home, MessageSquare, Calendar, Code, BookOpen, Coffee, Heart, Archive, User, Settings, LogOut, ChevronLeft } from "lucide-react";
+import { Calendar as CalendarIcon, Home, MessageSquare, Calendar, Code, BookOpen, Coffee, Heart, Archive, User, Settings, LogOut } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -78,14 +78,16 @@ export function AppSidebar() {
 
         <SidebarGroup>
           <div className="px-2 group-data-[collapsible=icon]:hidden">
-            <CalendarComponent
-              mode="single"
-              selected={date}
-              onSelect={handleDateSelect}
-              className="bg-background"
-              showOutsideDays={false}
-              fixedWeeks
-            />
+            <div className="w-full overflow-hidden rounded-md">
+              <CalendarComponent
+                mode="single"
+                selected={date}
+                onSelect={handleDateSelect}
+                className="bg-background"
+                showOutsideDays={false}
+                fixedWeeks
+              />
+            </div>
           </div>
         </SidebarGroup>
 
