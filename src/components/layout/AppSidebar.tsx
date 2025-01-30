@@ -81,12 +81,14 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <div className="px-4 py-2">
+          <div className="px-2">
             <CalendarComponent
               mode="single"
               selected={date}
               onSelect={handleDateSelect}
-              className="rounded-md border w-full"
+              className="rounded-md border"
+              showOutsideDays={false}
+              fixedWeeks
             />
           </div>
         </SidebarGroup>
@@ -112,41 +114,61 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="border-t">
-        <div className="flex items-center justify-between p-4">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <User className="h-5 w-5" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-2" side="right">
-              <p className="text-sm font-medium">{user?.email}</p>
-            </PopoverContent>
-          </Popover>
-          <div className="flex gap-1">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" onClick={() => navigate('/settings')}>
-                    <Settings className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="right">
-                  <p>Settings</p>
-                </TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" onClick={() => signOut()}>
-                    <LogOut className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="right">
-                  <p>Sign out</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
+        <div className="flex flex-col gap-2 p-2">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="ghost" size="icon" className="w-full justify-start">
+                      <User className="h-4 w-4" />
+                      <span className="ml-2">Profile</span>
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-2" side="right">
+                    <p className="text-sm font-medium">{user?.email}</p>
+                  </PopoverContent>
+                </Popover>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                <p>Profile</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={() => navigate('/settings')}
+                  className="w-full justify-start"
+                >
+                  <Settings className="h-4 w-4" />
+                  <span className="ml-2">Settings</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                <p>Settings</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={() => signOut()}
+                  className="w-full justify-start"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span className="ml-2">Sign out</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                <p>Sign out</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </SidebarFooter>
     </Sidebar>
