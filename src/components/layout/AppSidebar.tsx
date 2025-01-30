@@ -82,7 +82,7 @@ export function AppSidebar() {
               mode="single"
               selected={date}
               onSelect={handleDateSelect}
-              className="rounded-md border"
+              className="bg-background"
               showOutsideDays={false}
               fixedWeeks
             />
