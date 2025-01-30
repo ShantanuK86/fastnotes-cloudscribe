@@ -62,6 +62,7 @@ export function AppSidebar() {
         <div className="flex justify-end px-2 py-2">
           <SidebarTrigger />
         </div>
+        
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -118,17 +119,15 @@ export function AppSidebar() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button variant="ghost" size="icon" className="w-full justify-start">
-                      <User className="h-4 w-4" />
-                      <span className="ml-2">Profile</span>
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-2" side="right">
-                    <p className="text-sm font-medium">{user?.email}</p>
-                  </PopoverContent>
-                </Popover>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={() => navigate('/profile')}
+                  className="w-full justify-start group-data-[collapsible=icon]:justify-center"
+                >
+                  <User className="h-4 w-4" />
+                  <span className="ml-2 group-data-[collapsible=icon]:hidden">{user?.email}</span>
+                </Button>
               </TooltipTrigger>
               <TooltipContent side="right">
                 <p>Profile</p>
@@ -141,10 +140,10 @@ export function AppSidebar() {
                   variant="ghost" 
                   size="icon" 
                   onClick={() => navigate('/settings')}
-                  className="w-full justify-start"
+                  className="w-full justify-start group-data-[collapsible=icon]:justify-center"
                 >
                   <Settings className="h-4 w-4" />
-                  <span className="ml-2">Settings</span>
+                  <span className="ml-2 group-data-[collapsible=icon]:hidden">Settings</span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="right">
@@ -158,10 +157,10 @@ export function AppSidebar() {
                   variant="ghost" 
                   size="icon" 
                   onClick={() => signOut()}
-                  className="w-full justify-start"
+                  className="w-full justify-start group-data-[collapsible=icon]:justify-center"
                 >
                   <LogOut className="h-4 w-4" />
-                  <span className="ml-2">Sign out</span>
+                  <span className="ml-2 group-data-[collapsible=icon]:hidden">Sign out</span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="right">
