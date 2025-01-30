@@ -23,11 +23,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 
 const mainItems = [
   { title: "Home", icon: Home, count: "3298" },
@@ -82,7 +77,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <div className="px-2">
+          <div className="px-2 group-data-[collapsible=icon]:hidden">
             <CalendarComponent
               mode="single"
               selected={date}
@@ -121,12 +116,11 @@ export function AppSidebar() {
               <TooltipTrigger asChild>
                 <Button 
                   variant="ghost" 
-                  size="icon" 
+                  className="w-full justify-start"
                   onClick={() => navigate('/profile')}
-                  className="w-full justify-start group-data-[collapsible=icon]:justify-center"
                 >
                   <User className="h-4 w-4" />
-                  <span className="ml-2 group-data-[collapsible=icon]:hidden">{user?.email}</span>
+                  <span className="ml-2 group-data-[collapsible=icon]:hidden">Profile</span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="right">
@@ -138,9 +132,8 @@ export function AppSidebar() {
               <TooltipTrigger asChild>
                 <Button 
                   variant="ghost" 
-                  size="icon" 
+                  className="w-full justify-start"
                   onClick={() => navigate('/settings')}
-                  className="w-full justify-start group-data-[collapsible=icon]:justify-center"
                 >
                   <Settings className="h-4 w-4" />
                   <span className="ml-2 group-data-[collapsible=icon]:hidden">Settings</span>
@@ -155,9 +148,8 @@ export function AppSidebar() {
               <TooltipTrigger asChild>
                 <Button 
                   variant="ghost" 
-                  size="icon" 
+                  className="w-full justify-start"
                   onClick={() => signOut()}
-                  className="w-full justify-start group-data-[collapsible=icon]:justify-center"
                 >
                   <LogOut className="h-4 w-4" />
                   <span className="ml-2 group-data-[collapsible=icon]:hidden">Sign out</span>
