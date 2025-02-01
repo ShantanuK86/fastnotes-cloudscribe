@@ -78,15 +78,17 @@ export function AppSidebar() {
 
         <SidebarGroup>
           <div className="px-2 group-data-[collapsible=icon]:hidden">
-            <div className="w-full overflow-hidden rounded-md">
-              <CalendarComponent
-                mode="single"
-                selected={date}
-                onSelect={handleDateSelect}
-                className="bg-background"
-                showOutsideDays={false}
-                fixedWeeks
-              />
+            <div className="w-full overflow-hidden rounded-md bg-background">
+              <div className="scale-[0.85] transform origin-top-left">
+                <CalendarComponent
+                  mode="single"
+                  selected={date}
+                  onSelect={handleDateSelect}
+                  className="bg-background"
+                  showOutsideDays={false}
+                  fixedWeeks
+                />
+              </div>
             </div>
           </div>
         </SidebarGroup>
