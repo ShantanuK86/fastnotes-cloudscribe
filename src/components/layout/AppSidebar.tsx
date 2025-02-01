@@ -78,8 +78,8 @@ export function AppSidebar() {
 
         <SidebarGroup>
           <div className="px-2 group-data-[collapsible=icon]:hidden">
-            <div className="w-full overflow-hidden rounded-md bg-background">
-              <div className="scale-[0.85] transform origin-top-left">
+            <div className="w-full overflow-hidden rounded-md bg-background p-2">
+              <div className="scale-[0.95] transform origin-top-left">
                 <CalendarComponent
                   mode="single"
                   selected={date}
