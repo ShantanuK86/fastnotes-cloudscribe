@@ -73,7 +73,11 @@ export function AppSidebar() {
   }, {});
 
   return (
-    <Sidebar variant="floating" collapsible="icon" className="w-[20rem]">
+    <Sidebar 
+      variant="floating" 
+      collapsible="icon" 
+      className="w-[20rem] bg-opacity-50 backdrop-blur-sm"
+    >
       <SidebarContent className="scrollbar-none">
         <div className="flex justify-end px-2 py-2">
           <SidebarTrigger />
