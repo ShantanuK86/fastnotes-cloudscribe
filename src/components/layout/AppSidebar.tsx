@@ -14,15 +14,17 @@ import {
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { format } from "date-fns";
+import { format, isToday, isTomorrow, isYesterday } from "date-fns";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useNotes } from "@/hooks/useNotes";
+import { Note } from "@/types";
 
 const mainItems = [
   { title: "Home", icon: Home, count: "3298" },
@@ -39,10 +41,19 @@ const collections = [
   { title: "Personal", icon: BookOpen, count: "44" },
 ];
 
+const formatNoteDate = (dateString: string) => {
+  const date = new Date(dateString);
+  if (isToday(date)) return 'Today';
+  if (isTomorrow(date)) return 'Tomorrow';
+  if (isYesterday(date)) return 'Yesterday';
+  return format(date, 'MMM do yyyy');
+};
+
 export function AppSidebar() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const { data: notes } = useNotes();
 
   const handleDateSelect = (date?: Date) => {
     setDate(date);
@@ -50,6 +61,16 @@ export function AppSidebar() {
       navigate(`/notes?date=${format(date, 'yyyy-MM-dd')}`);
     }
   };
+
+  // Group notes by category
+  const notesByCategory = notes?.reduce((acc: { [key: string]: Note[] }, note) => {
+    const category = note.content?.includes('Welcome to Supernotes') ? 'Welcome' : 'Personal';
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(note);
+    return acc;
+  }, {});
 
   return (
     <Sidebar variant="floating" collapsible="icon" className="w-[20rem]">
@@ -113,8 +134,8 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t">
-        <div className="flex flex-col gap-2 p-2">
+      <SidebarFooter>
+        <div className="flex flex-col gap-2 p-2 border-t">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
