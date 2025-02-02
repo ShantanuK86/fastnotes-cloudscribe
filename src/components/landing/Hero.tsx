@@ -13,7 +13,7 @@ export const Hero = () => {
           className="mx-auto max-w-3xl text-center"
         >
           <span className="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
-            Introducing Fastnotes
+          🎉Introducing Fastnotes
           </span>
           <h1 className="mt-8 font-display text-4xl font-medium tracking-tight text-gray-900 sm:text-6xl">
             AI-Powered Note-Taking for the Modern Mind

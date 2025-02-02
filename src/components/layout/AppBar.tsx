@@ -8,7 +8,7 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { Link, useNavigate } from "react-router-dom";
-import { Bell, Home } from "lucide-react";
+import { Bell, Notebook } from "lucide-react";
 
 export const AppBar = () => {
   const { user, signOut } = useAuth();
@@ -32,7 +32,7 @@ export const AppBar = () => {
                 to="/"
                 className="flex items-center space-x-2"
               >
-                <Home className="h-5 w-5" />
+                <Notebook className="h-5 w-5" />
                 <span className="font-bold">Fastnotes</span>
               </Link>
             </NavigationMenuItem>
