@@ -10,7 +10,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
         <AppSidebar />
-        <main className="flex-1 overflow-auto">
+        <main className="flex-1 overflow-auto relative z-0">
           {children}
         </main>
       </div>
