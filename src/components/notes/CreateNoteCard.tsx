@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { useCreateNote } from "@/hooks/useNotes";
+import { useCreateNote, useNotes } from "@/hooks/useNotes";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -21,26 +21,34 @@ export const CreateNoteCard = ({
   const { toast } = useToast();
   const createNote = useCreateNote();
   const { user } = useAuth();
+  const { data: notes } = useNotes();
 
   useEffect(() => {
     const createWelcomeNote = async () => {
-      if (user) {
-        const welcomeContent = `# Welcome to Supernotes!\n\nHi ${user.email?.split('@')[0] || 'there'},\n\nWelcome to your first notecard on Supernotes! 🎉\n\nEach card has a separate display/edit view to give you an improved reading and editing experience. Press the Edit button in the top right (or double-tap on the text) to edit me.\n\nAdd whatever you like to a card using Markdown syntax. Some examples include *italic*, **bold** and highlighted text. It starts simply but is powerful once you master it.`;
-        
-        try {
-          await createNote.mutateAsync({
-            title: "Welcome to Supernotes!",
-            content: welcomeContent,
-          });
-        } catch (error) {
-          console.error("Error creating welcome note:", error);
+      if (user && notes) {
+        // Check if welcome note already exists
+        const welcomeNoteExists = notes.some(note => 
+          note.title === "Welcome to Supernotes!" || 
+          note.content?.includes('Welcome to Supernotes!')
+        );
+
+        if (!welcomeNoteExists) {
+          const welcomeContent = `# Welcome to Supernotes!\n\nHi ${user.email?.split('@')[0] || 'there'},\n\nWelcome to your first notecard on Supernotes! 🎉\n\nEach card has a separate display/edit view to give you an improved reading and editing experience. Press the Edit button in the top right (or double-tap on the text) to edit me.\n\nAdd whatever you like to a card using Markdown syntax. Some examples include *italic*, **bold** and highlighted text. It starts simply but is powerful once you master it.`;
+          
+          try {
+            await createNote.mutateAsync({
+              title: "Welcome to Supernotes!",
+              content: welcomeContent,
+            });
+          } catch (error) {
+            console.error("Error creating welcome note:", error);
+          }
         }
       }
     };
 
-    // Check if there are no notes yet
     createWelcomeNote();
-  }, [user]);
+  }, [user, notes]);
 
   const handleCreate = async () => {
     if (!title.trim()) {
