@@ -52,7 +52,7 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar variant="floating" collapsible="icon">
+    <Sidebar variant="floating" collapsible="icon" className="w-[20rem]">
       <SidebarContent className="scrollbar-none">
         <div className="flex justify-end px-2 py-2">
           <SidebarTrigger />
@@ -79,7 +79,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <div className="px-2 group-data-[collapsible=icon]:hidden">
             <div className="w-full overflow-hidden rounded-md bg-background p-2">
-              <div className="scale-[0.95] transform origin-top-left">
+              <div className="transform origin-top-left">
                 <CalendarComponent
                   mode="single"
                   selected={date}
