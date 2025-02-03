@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/ui/use-toast";
 import { User, Lock, Facebook } from "lucide-react";
 import { AppBar } from "@/components/layout/AppBar";
+import AnimatedGallery from "@/components/auth/AnimatedGallery";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -148,13 +149,9 @@ const Auth = () => {
             </form>
           </div>
 
-          {/* Right side - Image */}
-          <div className="hidden w-1/2 bg-primary/10 md:block">
-            <img
-              src="https://images.unsplash.com/photo-1498050108023-c5249f4df085"
-              alt="AI Note Taking"
-              className="h-full w-full object-cover"
-            />
+          {/* Right side - Animated Gallery */}
+          <div className="hidden w-1/2 md:block">
+            <AnimatedGallery />
           </div>
         </div>
       </div>
