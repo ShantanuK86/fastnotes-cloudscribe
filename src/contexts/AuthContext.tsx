@@ -81,22 +81,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = async () => {
     try {
-      // Check if there's an active session before signing out
-      const { data: { session: currentSession } } = await supabase.auth.getSession();
-      
-      if (!currentSession) {
-        // If no session exists, just clear the local state
-        setSession(null);
-        setUser(null);
-        toast({
-          title: "Signed out",
-          description: "You have been successfully signed out.",
-        });
-        return;
-      }
+      // Always clear the local state first
+      setSession(null);
+      setUser(null);
 
+      // Attempt to sign out from Supabase
       const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      
+      // Even if there's an error, we've already cleared the local state
+      if (error) {
+        console.error("Sign out error (non-critical):", error);
+      }
       
       toast({
         title: "Signed out",
@@ -104,14 +99,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
     } catch (error: any) {
       console.error("Sign out error:", error);
-      toast({
-        variant: "destructive",
-        title: "Error signing out",
-        description: error.message,
-      });
-      // Don't throw the error, just log it and clear the local state
-      setSession(null);
-      setUser(null);
+      // No need to show error toast since we've already cleared the local state
+      // and the user is effectively signed out
     }
   };
 

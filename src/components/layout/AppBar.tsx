@@ -16,13 +16,8 @@ export const AppBar = () => {
 
   const handleAuthAction = async () => {
     if (user) {
-      try {
-        await signOut();
-        navigate("/auth");
-      } catch (error) {
-        console.error("Error during sign out:", error);
-        // The error is already handled in the AuthContext
-      }
+      await signOut();
+      navigate("/auth");
     } else {
       navigate("/auth");
     }
