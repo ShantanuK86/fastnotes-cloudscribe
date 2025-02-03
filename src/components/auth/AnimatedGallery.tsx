@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 const images = [
   "/lovable-uploads/878d986f-0c0e-47e7-84ff-c860fb7c6fee.png",
@@ -8,37 +9,44 @@ const images = [
 ];
 
 const AnimatedGallery = () => {
+  const [imagePositions, setImagePositions] = useState<number[]>(
+    images.map((_, i) => i * 100)
+  );
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setImagePositions((prev) =>
+        prev.map((pos) => (pos <= -200 ? 400 : pos - 1))
+      );
+    }, 50);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="relative h-full w-full overflow-hidden bg-primary/10">
-      <div className="grid h-full grid-cols-2 gap-4 p-4">
+      <div className="relative h-full w-full" style={{ transform: "rotate(-15deg) scale(1.5)" }}>
         {images.map((image, index) => (
           <motion.div
             key={index}
-            className="relative aspect-[3/4] overflow-hidden rounded-xl"
-            initial={{ y: index % 2 === 0 ? -100 : 100, opacity: 0 }}
-            animate={{ 
-              y: 0, 
-              opacity: 1,
-              transition: { 
-                duration: 0.8,
-                delay: index * 0.2,
-              }
+            className="absolute left-0 w-full"
+            style={{
+              top: `${imagePositions[index]}%`,
+              height: "50%",
             }}
+            initial={false}
           >
-            <motion.img
-              src={image}
-              alt="Gallery image"
-              className="h-full w-full object-cover"
-              animate={{ 
-                y: [0, -10, 0],
-              }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                repeatType: "reverse",
-                delay: index * 1.5,
-              }}
-            />
+            <motion.div
+              className="relative mx-auto aspect-[3/4] w-3/4 overflow-hidden rounded-xl shadow-lg"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.2 }}
+            >
+              <img
+                src={image}
+                alt={`Gallery image ${index + 1}`}
+                className="h-full w-full object-cover"
+              />
+            </motion.div>
           </motion.div>
         ))}
       </div>
