@@ -9,6 +9,14 @@ import { useAuth } from "@/contexts/AuthContext";
 import { MessageSquare, Heart, Share2, PinIcon, Pencil, Trash2 } from "lucide-react";
 import { useUpdateNote, useDeleteNote } from "@/hooks/useNotes";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface NoteCardProps {
   note: Note;
@@ -22,6 +30,7 @@ export const NoteCard = ({ note }: NoteCardProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(note.title);
   const [editedContent, setEditedContent] = useState(note.content || "");
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const togglePin = () => {
     updateNote.mutate({
@@ -61,20 +70,19 @@ export const NoteCard = ({ note }: NoteCardProps) => {
   };
 
   const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this note?")) {
-      try {
-        await deleteNote.mutateAsync(note.id);
-        toast({
-          title: "Note deleted",
-          description: "Your note has been deleted successfully",
-        });
-      } catch (error: any) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      }
+    try {
+      await deleteNote.mutateAsync(note.id);
+      setShowDeleteDialog(false);
+      toast({
+        title: "Note deleted",
+        description: "Your note has been deleted successfully",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
     }
   };
 
@@ -117,60 +125,84 @@ export const NoteCard = ({ note }: NoteCardProps) => {
   }
 
   return (
-    <Card className="hover:shadow-lg transition-shadow duration-200">
-      <CardHeader className="space-y-1">
-        <div className="flex items-start justify-between">
-          <h3 className="font-semibold text-xl">{note.title}</h3>
-          <div className="flex gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsEditing(true)}
-              className="text-muted-foreground hover:text-primary"
-            >
-              <Pencil className="h-4 w-4" />
+    <>
+      <Card className="hover:shadow-lg transition-shadow duration-200">
+        <CardHeader className="space-y-1">
+          <div className="flex items-start justify-between">
+            <h3 className="font-semibold text-xl">{note.title}</h3>
+            <div className="flex gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsEditing(true)}
+                className="text-muted-foreground hover:text-primary"
+              >
+                <Pencil className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowDeleteDialog(true)}
+                className="text-muted-foreground hover:text-destructive"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={togglePin}
+                className={note.is_pinned ? "text-primary" : ""}
+              >
+                <PinIcon className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            ID: {note.id.slice(0, 8)}
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <p className="text-sm text-muted-foreground">{note.content}</p>
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <div className="flex items-center space-x-4 text-muted-foreground">
+            <Button variant="ghost" size="icon">
+              <Heart className="h-4 w-4" />
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleDelete}
-              className="text-muted-foreground hover:text-destructive"
-            >
-              <Trash2 className="h-4 w-4" />
+            <Button variant="ghost" size="icon">
+              <MessageSquare className="h-4 w-4" />
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={togglePin}
-              className={note.is_pinned ? "text-primary" : ""}
-            >
-              <PinIcon className="h-4 w-4" />
+            <Button variant="ghost" size="icon">
+              <Share2 className="h-4 w-4" />
             </Button>
           </div>
-        </div>
-        <p className="text-xs text-muted-foreground">
-          ID: {note.id.slice(0, 8)}
-        </p>
-      </CardHeader>
-      <CardContent className="space-y-2">
-        <p className="text-sm text-muted-foreground">{note.content}</p>
-      </CardContent>
-      <CardFooter className="flex justify-between">
-        <div className="flex items-center space-x-4 text-muted-foreground">
-          <Button variant="ghost" size="icon">
-            <Heart className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="icon">
-            <MessageSquare className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="icon">
-            <Share2 className="h-4 w-4" />
-          </Button>
-        </div>
-        <div className="flex items-center text-xs text-muted-foreground">
-          <span>Created {format(new Date(note.created_at), "MMM d")}</span>
-        </div>
-      </CardFooter>
-    </Card>
+          <div className="flex flex-col items-end text-xs text-muted-foreground space-y-1">
+            <span>Created {format(new Date(note.created_at), "MMM d")}</span>
+            {note.updated_at !== note.created_at && (
+              <span>Last edited {format(new Date(note.updated_at), "MMM d")}</span>
+            )}
+          </div>
+        </CardFooter>
+      </Card>
+
+      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Note</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this note? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleDelete}>
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
