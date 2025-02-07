@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import { CreateNoteCard } from "@/components/notes/CreateNoteCard";
 import { NotesList } from "@/components/notes/NotesList";
 import { useNotes } from "@/hooks/useNotes";
+import { Footer } from "@/components/layout/Footer";
 
 const Index = () => {
   const controls = useAnimation();
@@ -67,6 +68,7 @@ const Index = () => {
       <AppBar />
       <Hero />
       <Features />
+      <Footer />
     </motion.div>
   );
 };
