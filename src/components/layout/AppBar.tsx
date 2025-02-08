@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -7,12 +8,13 @@ import {
 } from "@/components/ui/navigation-menu";
 import { useAuth } from "@/contexts/AuthContext";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Bell, Notebook } from "lucide-react";
 
 export const AppBar = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleAuthAction = async () => {
     if (user) {
@@ -20,6 +22,18 @@ export const AppBar = () => {
       navigate("/auth");
     } else {
       navigate("/auth");
+    }
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    if (location.pathname !== '/') {
+      navigate('/?section=' + sectionId);
+      return;
+    }
+    
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -37,6 +51,28 @@ export const AppBar = () => {
                 <span className="font-bold">Fastnotes</span>
               </Link>
             </NavigationMenuItem>
+            {!user && (
+              <>
+                <NavigationMenuItem>
+                  <Button
+                    variant="ghost"
+                    onClick={() => scrollToSection('features')}
+                    className="text-sm"
+                  >
+                    Features
+                  </Button>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <Button
+                    variant="ghost"
+                    onClick={() => scrollToSection('pricing')}
+                    className="text-sm"
+                  >
+                    Pricing
+                  </Button>
+                </NavigationMenuItem>
+              </>
+            )}
             {user && (
               <NavigationMenuItem>
                 <Link

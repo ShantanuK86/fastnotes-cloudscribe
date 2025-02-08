@@ -1,8 +1,24 @@
 
 import { Github, Twitter } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const Footer = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const scrollToSection = (sectionId: string) => {
+    if (location.pathname !== '/') {
+      navigate('/?section=' + sectionId);
+      return;
+    }
+    
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <footer className="border-t bg-background">
       <div className="container mx-auto px-4 py-12">
@@ -18,13 +34,13 @@ export const Footer = () => {
             <h4 className="text-sm font-semibold">Product</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#features" className="hover:text-foreground">Features</a>
+                <button onClick={() => scrollToSection('features')} className="hover:text-foreground">Features</button>
               </li>
               <li>
-                <a href="#pricing" className="hover:text-foreground">Pricing</a>
+                <button onClick={() => scrollToSection('pricing')} className="hover:text-foreground">Pricing</button>
               </li>
               <li>
-                <a href="#about" className="hover:text-foreground">About</a>
+                <button onClick={() => scrollToSection('about')} className="hover:text-foreground">About</button>
               </li>
             </ul>
           </div>
@@ -33,13 +49,13 @@ export const Footer = () => {
             <h4 className="text-sm font-semibold">Resources</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#docs" className="hover:text-foreground">Documentation</a>
+                <button onClick={() => scrollToSection('docs')} className="hover:text-foreground">Documentation</button>
               </li>
               <li>
-                <a href="#help" className="hover:text-foreground">Help Center</a>
+                <button onClick={() => scrollToSection('help')} className="hover:text-foreground">Help Center</button>
               </li>
               <li>
-                <a href="#privacy" className="hover:text-foreground">Privacy</a>
+                <button onClick={() => scrollToSection('privacy')} className="hover:text-foreground">Privacy</button>
               </li>
             </ul>
           </div>
