@@ -2,7 +2,7 @@
 import { StickyNote, Book, BookOpen } from "lucide-react";
 
 const images = [
-  "public/lovable-uploads/david-travis-5bYxXawHOQg-unsplash.png",
+  "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
   "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
   "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
   "https://images.unsplash.com/photo-1498050108023-c5249f4df085"
