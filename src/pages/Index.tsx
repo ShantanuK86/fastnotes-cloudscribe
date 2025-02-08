@@ -12,6 +12,7 @@ import { format } from "date-fns";
 import { CreateNoteCard } from "@/components/notes/CreateNoteCard";
 import { NotesList } from "@/components/notes/NotesList";
 import { Footer } from "@/components/layout/Footer";
+import { useNotes } from "@/hooks/useNotes";
 
 const Index = () => {
   const controls = useAnimation();
