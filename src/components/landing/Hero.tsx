@@ -1,8 +1,22 @@
+
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const Hero = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const handleGetStarted = () => {
+    if (user) {
+      navigate('/notes');
+    } else {
+      navigate('/auth');
+    }
+  };
+
   return (
     <section className="relative overflow-hidden bg-background pt-20 pb-12 sm:pt-32 sm:pb-16 lg:pb-24">
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
@@ -26,6 +40,7 @@ export const Hero = () => {
           <div className="mt-10 flex items-center justify-center gap-x-6">
             <Button
               size="lg"
+              onClick={handleGetStarted}
               className="group relative overflow-hidden rounded-full bg-primary px-8 py-6 transition-all duration-300 hover:bg-primary-600"
             >
               Get Started
