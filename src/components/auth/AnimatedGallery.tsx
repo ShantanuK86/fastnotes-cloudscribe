@@ -29,7 +29,7 @@ const IMAGES_PER_COLUMN = Math.ceil(images.length / COLUMNS);
 const AnimatedGallery = () => {
   const [columnPositions, setColumnPositions] = useState<number[][]>(
     Array(COLUMNS).fill([]).map((_, colIndex) => 
-      Array(IMAGES_PER_COLUMN).fill(0).map((_, i) => i * 100)
+      Array(IMAGES_PER_COLUMN).fill(0).map((_, i) => i * 95) // Reduced gap between images
     )
   );
 
@@ -38,12 +38,12 @@ const AnimatedGallery = () => {
       setColumnPositions((prev) =>
         prev.map((column, colIndex) =>
           column.map((pos) => {
-            const speed = 0.3 + (colIndex * 0.15); // Slower, more consistent speed
-            return pos <= -100 ? 400 : pos - speed; // Adjusted for smaller image size
+            const speed = 0.15 + (colIndex * 0.05); // Much slower speed
+            return pos <= -95 ? 380 : pos - speed; // Adjusted for connected images
           })
         )
       );
-    }, 16); // Smoother animation with 60fps
+    }, 16); // Keep 60fps for smooth animation
 
     return () => clearInterval(interval);
   }, []);
@@ -57,7 +57,7 @@ const AnimatedGallery = () => {
           transformOrigin: "center center"
         }}
       >
-        <div className="flex h-full justify-center gap-3 px-6">
+        <div className="flex h-full justify-center gap-2 px-6">
           {Array(COLUMNS).fill(0).map((_, columnIndex) => (
             <div 
               key={columnIndex} 
@@ -74,12 +74,12 @@ const AnimatedGallery = () => {
                   className="absolute left-0 w-full"
                   style={{
                     top: `${columnPositions[columnIndex][imageIndex]}%`,
-                    height: "35%", // Smaller image height
+                    height: "33%", // Smaller images to connect better
                   }}
                   initial={false}
                 >
                   <motion.div
-                    className="relative mx-auto aspect-[3/4] w-[90%] overflow-hidden rounded-lg shadow-lg"
+                    className="relative mx-auto aspect-[3/4] w-[95%] overflow-hidden rounded-lg shadow-lg"
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.2 }}
                   >
