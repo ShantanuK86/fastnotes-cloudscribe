@@ -60,7 +60,7 @@ export const Hero = () => {
             </div>
           </motion.div>
 
-          {/* Right Column - Notes App Mockup */}
+          {/* Right Column - Phone Mockup */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -69,8 +69,8 @@ export const Hero = () => {
           >
             <div className="relative mx-auto max-w-[320px]">
               <img
-                src="/lovable-uploads/878d986f-0c0e-47e7-84ff-c860fb7c6fee.png"
-                alt="Notes App Interface"
+                src="/lovable-uploads/96a344ed-2d4c-4047-b32c-78aadde4be71.png"
+                alt="App Interface"
                 className="w-full h-auto rounded-xl shadow-2xl"
               />
               {/* Decorative Elements */}
