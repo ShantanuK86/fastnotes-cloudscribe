@@ -19,6 +19,12 @@ export const Hero = () => {
 
   return (
     <section className="relative overflow-hidden bg-background pt-20 pb-12 sm:pt-32 sm:pb-16 lg:pb-24">
+      {/* Vector Flow Background */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-[url('/lovable-uploads/005ff7de-ee3e-44b1-a99b-45543d62b51f.png')] bg-cover bg-center bg-no-repeat opacity-40 dark:opacity-20 mix-blend-multiply dark:mix-blend-lighten transition-opacity duration-300" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/5 to-background/90" />
+      </div>
+
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -27,12 +33,12 @@ export const Hero = () => {
           className="mx-auto max-w-3xl text-center"
         >
           <span className="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
-          🎉Introducing Fastnotes
+            🎉Introducing Fastnotes
           </span>
           <h1 className="mt-8 font-display text-4xl font-medium tracking-tight text-foreground sm:text-6xl">
             AI-Powered Note-Taking for the Modern Mind
           </h1>
-          <p className="mt-6 text-lg leading-8 text-gray-300">
+          <p className="mt-6 text-lg leading-8 text-muted-foreground">
             Transform your notes with AI-driven insights, seamless organization, and
             powerful collaboration tools. Experience note-taking reimagined for the
             future.
@@ -56,9 +62,8 @@ export const Hero = () => {
           </div>
         </motion.div>
       </div>
-      <div className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
-        <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-primary-200 to-primary-400 opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"></div>
-      </div>
+
+      {/* Remove the old gradient div since we have the new background */}
     </section>
   );
 };
