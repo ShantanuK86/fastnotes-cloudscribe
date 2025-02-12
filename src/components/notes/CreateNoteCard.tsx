@@ -28,16 +28,16 @@ export const CreateNoteCard = ({
       if (user && notes) {
         // Check if welcome note already exists
         const welcomeNoteExists = notes.some(note => 
-          note.title === "Welcome to Supernotes!" || 
-          note.content?.includes('Welcome to Supernotes!')
+          note.title === "Welcome to Fastnotes!" || 
+          note.content?.includes('Welcome to Fastnotes!')
         );
 
         if (!welcomeNoteExists) {
-          const welcomeContent = `# Welcome to Supernotes!\n\nHi ${user.email?.split('@')[0] || 'there'},\n\nWelcome to your first notecard on Supernotes! 🎉\n\nEach card has a separate display/edit view to give you an improved reading and editing experience. Press the Edit button in the top right (or double-tap on the text) to edit me.\n\nAdd whatever you like to a card using Markdown syntax. Some examples include *italic*, **bold** and highlighted text. It starts simply but is powerful once you master it.`;
+          const welcomeContent = `# Welcome to Fastnotes!\n\nHi ${user.email?.split('@')[0] || 'there'},\n\nWelcome to your first notecard on Fastnotes! 🎉\n\nEach card has a separate display/edit view to give you an improved reading and editing experience. Press the Edit button in the top right (or double-tap on the text) to edit me.\n\nAdd whatever you like to a card using Markdown syntax. Some examples include *italic*, **bold** and highlighted text. It starts simply but is powerful once you master it.`;
           
           try {
             await createNote.mutateAsync({
-              title: "Welcome to Supernotes!",
+              title: "Welcome to Fastnotes!",
               content: welcomeContent,
             });
           } catch (error) {
