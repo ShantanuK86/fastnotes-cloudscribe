@@ -26,6 +26,7 @@ import {
 import { useNotes } from "@/hooks/useNotes";
 import { Note } from "@/types";
 import { Notebook } from "lucide-react";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 const mainItems = [
   { title: "Home", icon: Home, count: "3298" },
@@ -89,8 +90,9 @@ export function AppSidebar() {
     >
       <SidebarContent className="scrollbar-none">
         <div className="px-4 py-4">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center justify-between">
             <Notebook className="h-5 w-5" />
+            <ThemeToggle />
           </div>
         </div>
 
