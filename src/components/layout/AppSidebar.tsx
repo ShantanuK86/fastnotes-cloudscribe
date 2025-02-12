@@ -57,8 +57,12 @@ export function AppSidebar() {
   const { data: notes } = useNotes();
 
   const handleSignOut = async () => {
-    await signOut();
-    navigate('/');  // Redirect to landing page after sign out
+    try {
+      await signOut();
+      navigate('/');  // Redirect to landing page after sign out
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   };
 
   const handleDateSelect = (date?: Date) => {
@@ -87,7 +91,6 @@ export function AppSidebar() {
         <div className="px-4 py-4">
           <div className="flex items-center space-x-2">
             <Notebook className="h-5 w-5" />
-            <span className="font-bold">Fastnotes</span>
           </div>
         </div>
 
