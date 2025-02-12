@@ -1,3 +1,4 @@
+
 import { Calendar as CalendarIcon, Home, MessageSquare, Calendar, Code, BookOpen, Coffee, Heart, Archive, User, Settings, LogOut } from "lucide-react";
 import {
   Sidebar,
@@ -64,7 +65,7 @@ export function AppSidebar() {
 
   // Group notes by category
   const notesByCategory = notes?.reduce((acc: { [key: string]: Note[] }, note) => {
-    const category = note.content?.includes('Welcome to Supernotes') ? 'Welcome' : 'Personal';
+    const category = note.content?.includes('Welcome to Fastnotes') ? 'Welcome' : 'Personal';
     if (!acc[category]) {
       acc[category] = [];
     }
@@ -79,6 +80,15 @@ export function AppSidebar() {
       className="w-[20rem] bg-opacity-50 backdrop-blur-sm"
     >
       <SidebarContent className="scrollbar-none">
+        {/* Logo */}
+        <div className="px-4 py-4">
+          <img 
+            src="/lovable-uploads/2e70ba08-3885-4512-8f90-c2d013e55101.png"
+            alt="Fastnotes Logo"
+            className="h-8 w-auto"
+          />
+        </div>
+
         <div className="flex justify-end px-2 py-2">
           <SidebarTrigger />
         </div>
