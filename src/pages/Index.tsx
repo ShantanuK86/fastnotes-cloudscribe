@@ -22,13 +22,7 @@ const Index = () => {
   const { data: notes, isLoading } = useNotes();
   const [isCreating, setIsCreating] = useState(false);
 
-  const filteredNotes = selectedDate
-    ? notes?.filter(note => {
-        const noteDate = format(new Date(note.created_at), 'yyyy-MM-dd');
-        return noteDate === selectedDate;
-      })
-    : notes;
-
+  // Move the animation effect outside of the conditional
   useEffect(() => {
     controls.start({
       opacity: 1,
@@ -36,6 +30,35 @@ const Index = () => {
       transition: { duration: 0.6 },
     });
   }, [controls]);
+
+  // Add smooth scrolling behavior - now this runs for both authenticated and non-authenticated states
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const link = target.closest('a[href^="#"]');
+      
+      if (link) {
+        e.preventDefault();
+        const id = link.getAttribute('href')?.slice(1);
+        if (id) {
+          const element = document.getElementById(id);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      }
+    };
+
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, []);
+
+  const filteredNotes = selectedDate
+    ? notes?.filter(note => {
+        const noteDate = format(new Date(note.created_at), 'yyyy-MM-dd');
+        return noteDate === selectedDate;
+      })
+    : notes;
 
   if (user) {
     return (
@@ -60,28 +83,6 @@ const Index = () => {
       </AppLayout>
     );
   }
-
-  useEffect(() => {
-    // Add smooth scrolling behavior
-    const handleClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const link = target.closest('a[href^="#"]');
-      
-      if (link) {
-        e.preventDefault();
-        const id = link.getAttribute('href')?.slice(1);
-        if (id) {
-          const element = document.getElementById(id);
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-          }
-        }
-      }
-    };
-
-    document.addEventListener('click', handleClick);
-    return () => document.removeEventListener('click', handleClick);
-  }, []);
 
   return (
     <motion.div
