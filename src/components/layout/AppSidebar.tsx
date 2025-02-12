@@ -1,4 +1,3 @@
-
 import { Calendar as CalendarIcon, Home, MessageSquare, Calendar, Code, BookOpen, Coffee, Heart, Archive, User, Settings, LogOut } from "lucide-react";
 import {
   Sidebar,
@@ -15,7 +14,7 @@ import {
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { format, isToday, isTomorrow, isYesterday } from "date-fns";
 import {
@@ -26,6 +25,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useNotes } from "@/hooks/useNotes";
 import { Note } from "@/types";
+import { Notebook } from "lucide-react";
 
 const mainItems = [
   { title: "Home", icon: Home, count: "3298" },
@@ -56,6 +56,11 @@ export function AppSidebar() {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const { data: notes } = useNotes();
 
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');  // Redirect to landing page after sign out
+  };
+
   const handleDateSelect = (date?: Date) => {
     setDate(date);
     if (date) {
@@ -63,7 +68,6 @@ export function AppSidebar() {
     }
   };
 
-  // Group notes by category
   const notesByCategory = notes?.reduce((acc: { [key: string]: Note[] }, note) => {
     const category = note.content?.includes('Welcome to Fastnotes') ? 'Welcome' : 'Personal';
     if (!acc[category]) {
@@ -80,13 +84,11 @@ export function AppSidebar() {
       className="w-[20rem] bg-opacity-50 backdrop-blur-sm"
     >
       <SidebarContent className="scrollbar-none">
-        {/* Logo */}
         <div className="px-4 py-4">
-          <img 
-            src="/lovable-uploads/2e70ba08-3885-4512-8f90-c2d013e55101.png"
-            alt="Fastnotes Logo"
-            className="h-8 w-auto"
-          />
+          <div className="flex items-center space-x-2">
+            <Notebook className="h-5 w-5" />
+            <span className="font-bold">Fastnotes</span>
+          </div>
         </div>
 
         <div className="flex justify-end px-2 py-2">
@@ -188,7 +190,7 @@ export function AppSidebar() {
                 <Button 
                   variant="ghost" 
                   className="w-full justify-start"
-                  onClick={() => signOut()}
+                  onClick={handleSignOut}
                 >
                   <LogOut className="h-4 w-4" />
                   <span className="ml-2 group-data-[collapsible=icon]:hidden">Sign out</span>
