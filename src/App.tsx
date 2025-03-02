@@ -9,7 +9,7 @@ import Auth from "@/pages/Auth";
 import Notes from "@/pages/Notes";
 import Tasks from "@/pages/Tasks";
 import Profile from "@/pages/Profile";
-import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import "@/App.css";
 
 // Create a client
@@ -18,7 +18,7 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="system" storageKey="fastnotes-theme">
+      <ThemeProvider>
         <AuthProvider>
           <Router>
             <Routes>

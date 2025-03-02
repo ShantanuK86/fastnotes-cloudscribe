@@ -1,11 +1,27 @@
+
 "use client";
 
 import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
+interface ThemeProviderProps {
+  children: React.ReactNode;
+  defaultTheme?: string;
+  storageKey?: string;
+}
+
+export function ThemeProvider({
+  children,
+  defaultTheme = "light",
+  storageKey = "fastnotes-theme"
+}: ThemeProviderProps) {
   return (
-    <NextThemesProvider attribute="class" defaultTheme="light" enableSystem={false}>
+    <NextThemesProvider 
+      attribute="class" 
+      defaultTheme={defaultTheme} 
+      storageKey={storageKey}
+      enableSystem={false}
+    >
       {children}
     </NextThemesProvider>
   );
