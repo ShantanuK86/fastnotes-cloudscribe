@@ -23,9 +23,9 @@ export const NotesList = ({ notes, isLoading }: NotesListProps) => {
 
   return (
     <ScrollArea className="w-full pb-4">
-      <div className="flex space-x-4 pb-6 px-1">
+      <div className="flex flex-col space-y-4 pb-6 px-1">
         {notes.map((note) => (
-          <div key={note.id} className="min-w-[320px] max-w-[400px]">
+          <div key={note.id} className="w-full">
             <NoteCard note={note} />
           </div>
         ))}
@@ -33,4 +33,3 @@ export const NotesList = ({ notes, isLoading }: NotesListProps) => {
     </ScrollArea>
   );
 };
-
