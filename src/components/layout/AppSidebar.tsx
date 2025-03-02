@@ -1,3 +1,4 @@
+
 import { Calendar as CalendarIcon, Home, MessageSquare, Calendar, Code, BookOpen, Coffee, Heart, Archive, User, Settings, LogOut } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarFooter, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
@@ -8,48 +9,21 @@ import { useNavigate } from "react-router-dom";
 import { format, isToday, isTomorrow, isYesterday } from "date-fns";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useNotes } from "@/hooks/useNotes";
+import { useCategories } from "@/hooks/useCategories";
+import { useTasks } from "@/hooks/useTasks";
 import { Note } from "@/types";
 import { Notebook } from "lucide-react";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
-const mainItems = [{
-  title: "Home",
-  icon: Home,
-  count: "3298"
-}, {
-  title: "Thoughts",
-  icon: MessageSquare,
-  count: "8"
-}, {
-  title: "Tasks",
-  icon: Calendar,
-  count: "46"
-}];
-const collections = [{
-  title: "Calls & Catchups",
-  icon: MessageSquare,
-  count: "30"
-}, {
-  title: "Code",
-  icon: Code,
-  count: "22"
-}, {
-  title: "Events",
-  icon: Calendar,
-  count: "13"
-}, {
-  title: "Food & Drink",
-  icon: Coffee,
-  count: "7"
-}, {
-  title: "Interest",
-  icon: Heart,
-  count: "32"
-}, {
-  title: "Personal",
-  icon: BookOpen,
-  count: "44"
-}];
+// Define icons mapper for dynamic rendering
+const iconMap: Record<string, any> = {
+  'MessageSquare': MessageSquare,
+  'Code': Code,
+  'Calendar': Calendar,
+  'Coffee': Coffee,
+  'Heart': Heart,
+  'BookOpen': BookOpen
+};
 
 const formatNoteDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -60,15 +34,12 @@ const formatNoteDate = (dateString: string) => {
 };
 
 export function AppSidebar() {
-  const {
-    user,
-    signOut
-  } = useAuth();
+  const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const {
-    data: notes
-  } = useNotes();
+  const { data: notes } = useNotes();
+  const { data: categories } = useCategories();
+  const { data: tasks } = useTasks();
   const { state } = useSidebar();
   
   const handleSignOut = async () => {
@@ -87,16 +58,36 @@ export function AppSidebar() {
     }
   };
 
+  // Calculate notes by category count
   const notesByCategory = notes?.reduce((acc: {
     [key: string]: Note[];
   }, note) => {
-    const category = note.content?.includes('Welcome to Fastnotes') ? 'Welcome' : 'Personal';
-    if (!acc[category]) {
-      acc[category] = [];
+    const categoryId = note.category_id;
+    const category = categories?.find(c => c.id === categoryId);
+    const categoryName = category?.name || 'Uncategorized';
+    
+    if (!acc[categoryName]) {
+      acc[categoryName] = [];
     }
-    acc[category].push(note);
+    acc[categoryName].push(note);
     return acc;
   }, {});
+
+  // Build main menu items
+  const mainItems = [
+    {
+      title: "Home",
+      icon: Home,
+      count: notes?.length.toString() || "0",
+      path: "/"
+    }, 
+    {
+      title: "Tasks",
+      icon: Calendar,
+      count: tasks?.length.toString() || "0",
+      path: "/tasks"
+    }
+  ];
 
   return <Sidebar variant="floating" collapsible="icon" className="w-[20rem] bg-opacity-50 backdrop-blur-sm">
       <SidebarContent className="scrollbar-none">
@@ -117,15 +108,20 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {mainItems.map(item => <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton tooltip={item.title}>
+              {mainItems.map(item => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton 
+                    tooltip={item.title}
+                    onClick={() => navigate(item.path)}
+                  >
                     <item.icon className="h-4 w-4" />
                     <span>{item.title}</span>
                     <span className="ml-auto text-xs text-muted-foreground">
                       {item.count}
                     </span>
                   </SidebarMenuButton>
-                </SidebarMenuItem>)}
+                </SidebarMenuItem>
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -144,15 +140,25 @@ export function AppSidebar() {
           <SidebarGroupLabel>Collections</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {collections.map(item => <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton tooltip={item.title}>
-                    <item.icon className="h-4 w-4" />
-                    <span>{item.title}</span>
-                    <span className="ml-auto text-xs text-muted-foreground">
-                      {item.count}
-                    </span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>)}
+              {categories?.map(category => {
+                const IconComponent = iconMap[category.icon] || MessageSquare;
+                const count = notesByCategory?.[category.name]?.length || 0;
+                
+                return (
+                  <SidebarMenuItem key={category.id}>
+                    <SidebarMenuButton 
+                      tooltip={category.name}
+                      onClick={() => navigate(`/notes?category=${category.id}`)}
+                    >
+                      <IconComponent className="h-4 w-4" />
+                      <span>{category.name}</span>
+                      <span className="ml-auto text-xs text-muted-foreground">
+                        {count}
+                      </span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

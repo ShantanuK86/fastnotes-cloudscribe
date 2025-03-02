@@ -9,6 +9,30 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      categories: {
+        Row: {
+          created_at: string
+          icon: string
+          id: string
+          name: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          icon: string
+          id?: string
+          name: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          icon?: string
+          id?: string
+          name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       note_tags: {
         Row: {
           note_id: string
@@ -41,6 +65,7 @@ export type Database = {
       }
       notes: {
         Row: {
+          category_id: string | null
           content: string | null
           created_at: string
           id: string
@@ -52,6 +77,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          category_id?: string | null
           content?: string | null
           created_at?: string
           id?: string
@@ -63,6 +89,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          category_id?: string | null
           content?: string | null
           created_at?: string
           id?: string
@@ -73,7 +100,15 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "notes_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -116,6 +151,42 @@ export type Database = {
           created_at?: string
           id?: string
           name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      tasks: {
+        Row: {
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          is_completed: boolean | null
+          priority: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          is_completed?: boolean | null
+          priority?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          is_completed?: boolean | null
+          priority?: string | null
+          title?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
