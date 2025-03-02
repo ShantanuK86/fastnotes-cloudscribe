@@ -1,12 +1,13 @@
+
 import { useState } from "react";
-import { format } from "date-fns";
+import { format, formatDistanceToNow } from "date-fns";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Note } from "@/types";
 import { useAuth } from "@/contexts/AuthContext";
-import { MessageSquare, Heart, Share2, PinIcon, Pencil, Trash2 } from "lucide-react";
+import { MessageSquare, Heart, Share2, PinIcon, Pencil, Trash2, MoreHorizontal } from "lucide-react";
 import { useUpdateNote, useDeleteNote } from "@/hooks/useNotes";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -86,15 +87,27 @@ export const NoteCard = ({ note }: NoteCardProps) => {
     }
   };
 
+  const getTimeDisplay = () => {
+    const now = new Date();
+    const noteDate = new Date(note.created_at);
+    const diffInHours = Math.abs(now.getTime() - noteDate.getTime()) / 36e5;
+    
+    if (diffInHours < 24) {
+      return formatDistanceToNow(noteDate, { addSuffix: true });
+    } else {
+      return format(noteDate, 'MMM do yyyy');
+    }
+  };
+
   if (isEditing) {
     return (
-      <Card className="hover:shadow-lg transition-shadow duration-200">
+      <Card className="hover:shadow-lg transition-shadow duration-200 bg-[#1A1F2C] text-white border-[#333333]/30">
         <CardHeader className="space-y-4">
           <Input
             value={editedTitle}
             onChange={(e) => setEditedTitle(e.target.value)}
             placeholder="Note title"
-            className="text-lg font-semibold"
+            className="text-lg font-semibold bg-[#222222] border-[#444444]"
           />
         </CardHeader>
         <CardContent className="space-y-4">
@@ -103,6 +116,7 @@ export const NoteCard = ({ note }: NoteCardProps) => {
             onChange={(e) => setEditedContent(e.target.value)}
             placeholder="Note content"
             rows={4}
+            className="bg-[#222222] border-[#444444]"
           />
           <div className="flex justify-end gap-2">
             <Button
@@ -112,6 +126,7 @@ export const NoteCard = ({ note }: NoteCardProps) => {
                 setEditedTitle(note.title);
                 setEditedContent(note.content || "");
               }}
+              className="text-white border-[#444444] hover:bg-[#333333]"
             >
               Cancel
             </Button>
@@ -126,60 +141,38 @@ export const NoteCard = ({ note }: NoteCardProps) => {
 
   return (
     <>
-      <Card className="hover:shadow-lg transition-shadow duration-200">
-        <CardHeader className="space-y-1">
+      <Card className="hover:shadow-lg transition-shadow duration-200 bg-[#1A1F2C] text-white border-[#333333]/30">
+        <CardHeader className="pb-2">
           <div className="flex items-start justify-between">
-            <h3 className="font-semibold text-xl">{note.title}</h3>
-            <div className="flex gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsEditing(true)}
-                className="text-muted-foreground hover:text-primary"
-              >
-                <Pencil className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setShowDeleteDialog(true)}
-                className="text-muted-foreground hover:text-destructive"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={togglePin}
-                className={note.is_pinned ? "text-primary" : ""}
-              >
-                <PinIcon className="h-4 w-4" />
-              </Button>
-            </div>
+            <h3 className="font-semibold text-xl text-white">{note.title}</h3>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-gray-400 hover:text-white h-8 w-8"
+            >
+              <MoreHorizontal className="h-5 w-5" />
+            </Button>
           </div>
-          <p className="text-xs text-muted-foreground">
-            ID: {note.id.slice(0, 8)}
-          </p>
         </CardHeader>
-        <CardContent className="space-y-2">
-          <p className="text-sm text-muted-foreground">{note.content}</p>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <div className="flex items-center space-x-4 text-muted-foreground">
-            <Button variant="ghost" size="icon">
-              <Heart className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="icon">
-              <MessageSquare className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="icon">
-              <Share2 className="h-4 w-4" />
-            </Button>
+        <CardContent className="pt-0 pb-3">
+          <div className="prose prose-invert max-w-none">
+            {note.content && (
+              <div className="text-[#C8C8C9] whitespace-pre-wrap">{note.content}</div>
+            )}
           </div>
-          <div className="flex flex-col items-end text-xs text-muted-foreground space-y-1">
-            <span>Created {format(new Date(note.created_at), "MMM d")}</span>
-            {note.updated_at !== note.created_at && (
-              <span>Last edited {format(new Date(note.updated_at), "MMM d")}</span>
+        </CardContent>
+        <CardFooter className="pt-0 pb-2 text-xs text-[#8A898C] justify-between">
+          <div>
+            {getTimeDisplay()}
+          </div>
+          <div className="flex items-center space-x-1">
+            <Button variant="ghost" size="icon" className="h-7 w-7 text-[#8A898C] hover:text-white">
+              <Pencil className="h-4 w-4" onClick={() => setIsEditing(true)} />
+            </Button>
+            {note.is_pinned && (
+              <Button variant="ghost" size="icon" className="h-7 w-7 text-primary hover:text-primary/80">
+                <PinIcon className="h-4 w-4" onClick={togglePin} />
+              </Button>
             )}
           </div>
         </CardFooter>

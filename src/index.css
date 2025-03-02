@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -27,11 +28,11 @@
   }
 
   .dark {
-    --background: 20 14.3% 4.1%;
+    --background: 224 25% 10%;
     --foreground: 0 0% 95%;
-    --card: 24 9.8% 10%;
+    --card: 224 30% 10%;
     --card-foreground: 0 0% 95%;
-    --popover: 0 0% 9%;
+    --popover: 224 30% 10%;
     --popover-foreground: 0 0% 95%;
     --primary: 142.1 70.6% 45.3%;
     --primary-foreground: 144.9 80.4% 10%;

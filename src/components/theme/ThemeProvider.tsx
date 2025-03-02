@@ -12,7 +12,7 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({
   children,
-  defaultTheme = "light",
+  defaultTheme = "dark",
   storageKey = "fastnotes-theme"
 }: ThemeProviderProps) {
   return (
