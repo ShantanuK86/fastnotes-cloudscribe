@@ -1,5 +1,5 @@
 import { Calendar as CalendarIcon, Home, MessageSquare, Calendar, Code, BookOpen, Coffee, Heart, Archive, User, Settings, LogOut } from "lucide-react";
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarFooter, SidebarTrigger } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarFooter, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -11,6 +11,7 @@ import { useNotes } from "@/hooks/useNotes";
 import { Note } from "@/types";
 import { Notebook } from "lucide-react";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+
 const mainItems = [{
   title: "Home",
   icon: Home,
@@ -49,6 +50,7 @@ const collections = [{
   icon: BookOpen,
   count: "44"
 }];
+
 const formatNoteDate = (dateString: string) => {
   const date = new Date(dateString);
   if (isToday(date)) return 'Today';
@@ -56,6 +58,7 @@ const formatNoteDate = (dateString: string) => {
   if (isYesterday(date)) return 'Yesterday';
   return format(date, 'MMM do yyyy');
 };
+
 export function AppSidebar() {
   const {
     user,
@@ -66,6 +69,8 @@ export function AppSidebar() {
   const {
     data: notes
   } = useNotes();
+  const { state } = useSidebar();
+  
   const handleSignOut = async () => {
     try {
       await signOut();
@@ -74,12 +79,14 @@ export function AppSidebar() {
       console.error('Error signing out:', error);
     }
   };
+
   const handleDateSelect = (date?: Date) => {
     setDate(date);
     if (date) {
       navigate(`/notes?date=${format(date, 'yyyy-MM-dd')}`);
     }
   };
+
   const notesByCategory = notes?.reduce((acc: {
     [key: string]: Note[];
   }, note) => {
@@ -90,12 +97,16 @@ export function AppSidebar() {
     acc[category].push(note);
     return acc;
   }, {});
+
   return <Sidebar variant="floating" collapsible="icon" className="w-[20rem] bg-opacity-50 backdrop-blur-sm">
       <SidebarContent className="scrollbar-none">
         <div className="px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Notebook className="h-5 w-5" />
-            <ThemeToggle />
+          <div className={`flex items-center ${state === "expanded" ? "justify-between" : "justify-center"}`}>
+            <div className="flex items-center gap-2">
+              <Notebook className="h-5 w-5" />
+              {state === "expanded" && <span className="font-bold">FastNotes</span>}
+            </div>
+            {state === "expanded" && <ThemeToggle />}
           </div>
         </div>
 
