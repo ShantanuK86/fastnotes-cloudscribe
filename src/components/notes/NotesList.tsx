@@ -1,6 +1,7 @@
 
 import { Note } from "@/types";
 import { NoteCard } from "./NoteCard";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface NotesListProps {
   notes?: Note[];
@@ -21,10 +22,15 @@ export const NotesList = ({ notes, isLoading }: NotesListProps) => {
   }
 
   return (
-    <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {notes.map((note) => (
-        <NoteCard key={note.id} note={note} />
-      ))}
-    </div>
+    <ScrollArea className="w-full pb-4">
+      <div className="flex space-x-4 pb-6 px-1">
+        {notes.map((note) => (
+          <div key={note.id} className="min-w-[320px] max-w-[400px]">
+            <NoteCard note={note} />
+          </div>
+        ))}
+      </div>
+    </ScrollArea>
   );
 };
+
